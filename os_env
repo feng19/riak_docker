@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+export RIAK_HOSTS=($(sudo docker inspect -f 'localhost:{{(index (index .NetworkSettings.Ports "8087/tcp") 0).HostPort}}' docker_coordinator_1 docker_member_1_1 docker_member_2_1 docker_member_3_1 docker_member_4_1))
+export BG_RIAK_COUNT=${#RIAK_HOSTS[@]}
+
+for ((i=0;i<BG_RIAK_COUNT;i++))
+do
+    arr=(${RIAK_HOSTS[i]//:/ })
+    HOST=BG_RIAK_HOST_`expr ${i} + 1`
+    PORT=BG_RIAK_PORT_`expr ${i} + 1`
+    eval export $HOST=${arr[0]}
+    eval export $PORT=${arr[1]}
+done
+
+export RIAK_TEST_PB_HOST="localhost"
+export RIAK_TEST_PBC_1=$BG_RIAK_PORT_1

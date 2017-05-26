@@ -1,0 +1,86 @@
+version: "2"
+services:
+  coordinator:
+    image: basho/riak-kv
+    ports:
+      - "127.0.0.1:48087:8087"
+      - "127.0.0.1:48098:8098"
+    expose:
+      - "8087"
+      - "8098"
+    environment:
+      - CLUSTER_NAME=riakkv
+    labels:
+      - "com.basho.riak.cluster.name=riak-kv"
+    volumes:
+      - ./schemas:/etc/riak/schemas
+      - ./user.conf:/etc/riak/user.conf
+    network_mode: bridge
+  member_1:
+    image: basho/riak-kv
+    ports:
+      - "127.0.0.1:48088:8087"
+      - "127.0.0.1:48099:8098"
+    labels:
+      - "com.basho.riak.cluster.name=riak-kv"
+    volumes:
+      - ./user.conf:/etc/riak/user.conf
+    links:
+      - coordinator
+    network_mode: bridge
+    depends_on:
+      - coordinator
+    environment:
+      - CLUSTER_NAME=riakkv
+      - COORDINATOR_NODE=coordinator
+  member_2:
+    image: basho/riak-kv
+    ports:
+      - "127.0.0.1:48089:8087"
+      - "127.0.0.1:48100:8098"
+    labels:
+      - "com.basho.riak.cluster.name=riak-kv"
+    volumes:
+      - ./user.conf:/etc/riak/user.conf
+    links:
+      - coordinator
+    network_mode: bridge
+    depends_on:
+      - coordinator
+    environment:
+      - CLUSTER_NAME=riakkv
+      - COORDINATOR_NODE=coordinator
+  member_3:
+    image: basho/riak-kv
+    ports:
+      - "127.0.0.1:48090:8087"
+      - "127.0.0.1:48101:8098"
+    labels:
+      - "com.basho.riak.cluster.name=riak-kv"
+    volumes:
+      - ./user.conf:/etc/riak/user.conf
+    links:
+      - coordinator
+    network_mode: bridge
+    depends_on:
+      - coordinator
+    environment:
+      - CLUSTER_NAME=riakkv
+      - COORDINATOR_NODE=coordinator
+  member_4:
+    image: basho/riak-kv
+    ports:
+      - "127.0.0.1:48091:8087"
+      - "127.0.0.1:48102:8098"
+    labels:
+      - "com.basho.riak.cluster.name=riak-kv"
+    volumes:
+      - ./user.conf:/etc/riak/user.conf
+    links:
+      - coordinator
+    network_mode: bridge
+    depends_on:
+      - coordinator
+    environment:
+      - CLUSTER_NAME=riakkv
+      - COORDINATOR_NODE=coordinator
